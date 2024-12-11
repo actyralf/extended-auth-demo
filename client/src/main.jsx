@@ -9,7 +9,7 @@ import Profile from "./pages/Profile.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import UserDetails from "./pages/UserDetails.jsx";
-import { UserProvider } from "./context/UserContext.jsx";
+import { UserProvider } from "./context/UserProvider.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([

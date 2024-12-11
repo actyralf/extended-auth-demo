@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import LogOut from "./Logout";
 
 export function Nav() {
-  const { user } = useUser();
+  const { user, signOut } = useUser();
   return (
     <nav>
       <ul>
@@ -15,7 +14,7 @@ export function Nav() {
         </li>
 
         {user ? (
-          <LogOut />
+          <button onClick={signOut}>Sign Out</button>
         ) : (
           <>
             <li>
