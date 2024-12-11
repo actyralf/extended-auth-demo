@@ -1,11 +1,21 @@
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/auth";
 
 export default function Login() {
-  const { user, login } = useUser();
-  const [name, setName] = useState("");
+  const { user } = useUser();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const signIn = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error("Error signing in:", error.message);
+    }
+  };
 
   if (user) {
     return <Navigate to="/" />;
@@ -16,14 +26,14 @@ export default function Login() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          login(name, password);
+          signIn(email, password);
         }}
       >
         <input
           type="text"
-          value={name}
+          value={email}
           onChange={(e) => {
-            setName(e.target.value);
+            setEmail(e.target.value);
           }}
         />
         <input

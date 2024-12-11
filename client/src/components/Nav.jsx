@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import LogOut from "./Logout";
 
 export function Nav() {
-  const { user, logout } = useUser();
+  const { user } = useUser();
   return (
     <nav>
       <ul>
@@ -12,10 +13,18 @@ export function Nav() {
         <li>
           <Link to="/profile">Profile</Link>
         </li>
+
         {user ? (
-          <button onClick={logout}>Logout</button>
+          <LogOut />
         ) : (
-          <Link to="/login">Login</Link>
+          <>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+          </>
         )}
       </ul>
     </nav>
