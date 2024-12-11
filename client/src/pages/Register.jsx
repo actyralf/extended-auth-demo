@@ -5,10 +5,17 @@ import { Navigate } from "react-router-dom";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, signUp } = useUser();
+  const { user, isLoading, profileData, signUp } = useUser();
 
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
   if (user) {
-    return <Navigate to="/" />;
+    if (profileData) {
+      return <Navigate to="/" />;
+    } else {
+      return <Navigate to="/user-details" />;
+    }
   }
   return (
     <>
