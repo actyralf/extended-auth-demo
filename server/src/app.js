@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { json } from "express";
 import cors from "cors";
 import { firebaseRequireAuth } from "./middleware/firebaseRequireAuth.js";
+import firebaseAdmin from "./firebase/admin.js";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -16,8 +17,6 @@ const wait = (ms) => {
   });
 };
 
-// {"sdkjfhksdjfh":{ city:"Bonn"},"sdjhfsdjhfg":{}}
-
 app.use(cors());
 app.use(json());
 
@@ -30,16 +29,15 @@ app.post("/profile", firebaseRequireAuth, async (req, res) => {
   profileData[req.user.uid] = { city: req.body.city };
   console.log(profileData);
   await wait(2000);
-  // await firebaseAdmin
-  //   .auth()
-  //   .setCustomUserClaims(req.user.uid, { completed: true });
+  await firebaseAdmin
+    .auth()
+    .setCustomUserClaims(req.user.uid, { signUpCompleted: true });
   return res.json(profileData[req.user.uid]);
 });
 
 app.get("/profile", firebaseRequireAuth, async (req, res) => {
   await wait(2000);
-
-  return res.json({ profile: profileData[req.user.uid] });
+  return res.json(profileData[req.user.uid]);
 });
 
 app.listen(PORT, () => {

@@ -8,24 +8,24 @@ import { UserContext } from "./UserContext";
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [profileData, setProfileData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (newUser) => {
       if (newUser) {
         console.log("User logged in", newUser);
-        setIsLoading(true);
-        setUser(newUser);
-        loadProfileData(newUser).then(() => {
-          console.log("profile data loaded");
-          setIsLoading(false);
+        newUser.getIdTokenResult().then((idTokenResult) => {
+          console.log("idTokenResult", idTokenResult);
+          setUser({
+            ...newUser,
+            signUpCompleted: !!idTokenResult.claims.signUpCompleted,
+          });
         });
+        setUser(newUser);
       } else {
         console.log("No user is signed in.");
         setUser(null);
         setIsLoading(false);
-        setProfileData(null);
       }
     });
 
@@ -70,31 +70,6 @@ export function UserProvider({ children }) {
     }
   };
 
-  async function loadProfileData(tempUser) {
-    try {
-      setIsLoading(true);
-      if (!tempUser) {
-        throw new Error("not authorized");
-      }
-      const response = await fetch("http://localhost:3000/profile", {
-        headers: {
-          Authorization: `Bearer ${tempUser.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("fetch profile failed");
-      }
-      const data = await response.json();
-      console.log(data);
-      setProfileData(data.profile);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   async function updateProfileData(newData) {
     try {
       if (!user) {
@@ -112,8 +87,7 @@ export function UserProvider({ children }) {
       if (!response.ok) {
         throw new Error("fetch failed");
       }
-      const data = await response.json();
-      setProfileData(data);
+      await refreshUser();
     } catch (err) {
       console.log(err);
     } finally {
@@ -121,11 +95,27 @@ export function UserProvider({ children }) {
     }
   }
 
+  async function refreshUser() {
+    if (auth.currentUser) {
+      try {
+        setIsLoading(true);
+        const idTokenResult = await auth.currentUser.getIdTokenResult(true);
+        setUser({
+          ...auth.currentUser,
+          signUpCompleted: idTokenResult.claims.signUpCompleted,
+        });
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
         user,
-        profileData,
         signIn,
         signOut,
         signUp,

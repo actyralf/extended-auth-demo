@@ -3,7 +3,7 @@ import { useUser } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
 
 export default function UserDetails() {
-  const { user, profileData, isLoading, updateProfileData } = useUser();
+  const { user, isLoading, updateProfileData } = useUser();
   const [city, setCity] = useState("");
 
   const handleSubmit = async (e) => {
@@ -20,7 +20,7 @@ export default function UserDetails() {
     return <h2>Loading...</h2>;
   }
 
-  if (user && profileData) {
+  if (user && user.signUpCompleted) {
     console.log("user details navigate home");
     return <Navigate to="/" />;
   }
