@@ -14,7 +14,7 @@ export default function Register() {
     if (user.signUpCompleted) {
       return <Navigate to="/" />;
     } else {
-      return <Navigate to="/user-details" />;
+      return <Navigate to="/register/user-details" />;
     }
   }
   return (

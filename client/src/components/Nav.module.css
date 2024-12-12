@@ -1,0 +1,28 @@
+.nav {
+  display: flex;
+  align-items: stretch;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 80px;
+  background-color: cornflowerblue;
+  margin: 0;
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  gap: 12px;
+  height: 100%;
+  margin: 0;
+}
+
+.nav a {
+  color: lightblue;
+}
+
+.nav a.active-link {
+  color: white;
+}

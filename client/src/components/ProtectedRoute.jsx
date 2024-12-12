@@ -12,7 +12,7 @@ export function ProtectedRoute({ children }) {
     if (user.signUpCompleted) {
       return <>{children}</>;
     } else {
-      return <Navigate to="/user-details" />;
+      return <Navigate to="/register/user-details" />;
     }
   }
   return <Navigate to="/login" />;

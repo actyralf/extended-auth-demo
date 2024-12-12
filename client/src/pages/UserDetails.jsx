@@ -35,6 +35,7 @@ export default function UserDetails() {
       <h1>UserDetails</h1>
       <form onSubmit={handleSubmit}>
         <input
+          placeholder="City"
           type="text"
           value={city}
           onChange={(e) => {
