@@ -9,8 +9,9 @@ import Profile from "./pages/Profile.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import UserDetails from "./pages/UserDetails.jsx";
-import { UserProvider } from "./context/UserContext.jsx";
+import { UserProvider } from "./context/UserProvider.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
+import AuthLayout from "./pages/AuthLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,17 +30,29 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+    ],
+  },
+  {
+    path: "register",
+    element: <AuthLayout />,
+    children: [
       {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
+        index: true,
         element: <Register />,
       },
       {
         path: "user-details",
         element: <UserDetails />,
+      },
+    ],
+  },
+  {
+    path: "login",
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
       },
     ],
   },

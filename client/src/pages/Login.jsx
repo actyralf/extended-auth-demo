@@ -3,12 +3,21 @@ import { useUser } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
 
 export default function Login() {
-  const { user, login } = useUser();
-  const [name, setName] = useState("");
+  const { user, isLoading, signIn } = useUser();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  console.log("Login", { email: user?.email, isLoading });
+
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
   if (user) {
-    return <Navigate to="/" />;
+    if (user.signUpCompleted) {
+      return <Navigate to="/" />;
+    } else {
+      return <Navigate to="/register/user-details" />;
+    }
   }
   return (
     <>
@@ -16,14 +25,14 @@ export default function Login() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          login(name, password);
+          signIn(email, password);
         }}
       >
         <input
           type="text"
-          value={name}
+          value={email}
           onChange={(e) => {
-            setName(e.target.value);
+            setEmail(e.target.value);
           }}
         />
         <input
